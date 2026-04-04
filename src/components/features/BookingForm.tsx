@@ -93,7 +93,7 @@ export function BookingForm({
   const insuranceLabel = insuranceType === "health" ? "Health" : "Term";
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6" noValidate>
+    <form onSubmit={handleSubmit(onSubmit)} className="p-4 lg:p-6" noValidate>
       {/* Back link */}
       {showBackButton && onBack && (
         <button
@@ -142,70 +142,72 @@ export function BookingForm({
         </div>
       </div>
 
-      {/* Form fields */}
-      <div className="mt-5 flex flex-col gap-[18px]" role="group" aria-label="Contact details">
-        <FormField fieldId="field-name" icon={<Image src="/icons/user.svg" alt="" width={20} height={20} />} error={errors.name?.message}>
-          <input
-            {...register("name")}
-            id="field-name"
-            aria-label="Full name"
-            aria-describedby={errors.name ? "field-name-error" : undefined}
-            aria-invalid={!!errors.name}
-            placeholder="Your name"
-            className="w-full bg-transparent font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
-          />
-        </FormField>
-
-        <FormField fieldId="field-phone" prefix={"+91\u00a0-\u00a0"} icon={<Image src="/icons/mobile-phone.svg" alt="" width={18} height={20} />} error={errors.phone?.message}>
-          <input
-            {...register("phone")}
-            id="field-phone"
-            aria-label="Phone number"
-            aria-describedby={errors.phone ? "field-phone-error" : undefined}
-            aria-invalid={!!errors.phone}
-            type="tel"
-            inputMode="numeric"
-            maxLength={10}
-            placeholder="9897969594"
-            className="w-full bg-transparent font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
-          />
-        </FormField>
-
-        <FormField fieldId="field-email" icon={<Image src="/icons/email.svg" alt="" width={20} height={20} />} error={errors.email?.message}>
-          <input
-            {...register("email")}
-            id="field-email"
-            aria-label="Email address"
-            aria-describedby={errors.email ? "field-email-error" : undefined}
-            aria-invalid={!!errors.email}
-            type="email"
-            placeholder="your@email.com"
-            className="w-full bg-transparent font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
-          />
-        </FormField>
-
-        <div>
-          <div className="overflow-hidden rounded-2xl border-[1.5px] border-[#eeeeef]">
-            <textarea
-              {...register("note")}
-              aria-label="Additional notes"
-              placeholder="Tell us about your insurance needs..."
-              className="h-[80px] w-full resize-none bg-white px-4 py-3.5 font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
+      {/* Form fields — wrapped in white card on mobile */}
+      <div className="mt-5 rounded-[24px] bg-white p-5 lg:mt-5 lg:rounded-none lg:bg-transparent lg:p-0">
+        <div className="flex flex-col gap-[18px]" role="group" aria-label="Contact details">
+          <FormField fieldId="field-name" icon={<Image src="/icons/user.svg" alt="" width={20} height={20} />} error={errors.name?.message}>
+            <input
+              {...register("name")}
+              id="field-name"
+              aria-label="Full name"
+              aria-describedby={errors.name ? "field-name-error" : undefined}
+              aria-invalid={!!errors.name}
+              placeholder="Enter your Name"
+              className="w-full bg-transparent font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
             />
+          </FormField>
+
+          <FormField fieldId="field-phone" prefix={"+91\u00a0-\u00a0"} icon={<Image src="/icons/mobile-phone.svg" alt="" width={18} height={20} />} error={errors.phone?.message}>
+            <input
+              {...register("phone")}
+              id="field-phone"
+              aria-label="Phone number"
+              aria-describedby={errors.phone ? "field-phone-error" : undefined}
+              aria-invalid={!!errors.phone}
+              type="tel"
+              inputMode="numeric"
+              maxLength={10}
+              placeholder="Mobile Number"
+              className="w-full bg-transparent font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
+            />
+          </FormField>
+
+          <FormField fieldId="field-email" icon={<Image src="/icons/email.svg" alt="" width={20} height={20} />} error={errors.email?.message}>
+            <input
+              {...register("email")}
+              id="field-email"
+              aria-label="Email address"
+              aria-describedby={errors.email ? "field-email-error" : undefined}
+              aria-invalid={!!errors.email}
+              type="email"
+              placeholder="Email Address"
+              className="w-full bg-transparent font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
+            />
+          </FormField>
+
+          <div>
+            <div className="overflow-hidden rounded-2xl border-[1.5px] border-[#eeeeef]">
+              <textarea
+                {...register("note")}
+                aria-label="Additional notes"
+                placeholder="Enter your query"
+                className="h-[80px] w-full resize-none bg-white px-4 py-3.5 font-heading text-base text-[#222223] placeholder:text-[#999] focus:outline-none"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Submit button */}
-      <div className="mt-5">
-        <button
-          type="submit"
-          disabled={isSubmitting || submitDisabled}
-          className="flex h-[62px] w-full items-center justify-between rounded-[18px] bg-ditto-blue-dark px-6 font-heading text-xl font-medium text-white shadow-[0px_6px_12px_0px_rgba(30,37,75,0.06)] transition-colors hover:bg-ditto-blue-active disabled:opacity-50"
-        >
-          <span>Schedule a Free Call</span>
-          <Image src="/icons/phone-calendar.svg" alt="" width={21} height={20} />
-        </button>
+        {/* Submit button */}
+        <div className="mt-5">
+          <button
+            type="submit"
+            disabled={isSubmitting || submitDisabled}
+            className="flex h-[62px] w-full items-center justify-between rounded-[18px] bg-ditto-blue-dark px-6 font-heading text-xl font-medium text-white shadow-[0px_6px_12px_0px_rgba(30,37,75,0.06)] transition-colors hover:bg-ditto-blue-active disabled:opacity-50"
+          >
+            <span>Schedule a Free Call</span>
+            <Image src="/icons/phone-calendar.svg" alt="" width={21} height={20} />
+          </button>
+        </div>
       </div>
     </form>
   );

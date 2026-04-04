@@ -32,7 +32,10 @@ const EARLIEST_TIME = "1:00 PM";
 export function SchedulingCard() {
   const earliestDate = useMemo(() => getNextSixDays()[0], []);
 
-  const [activeTab, setActiveTab] = useState<InsuranceType>("health");
+  const [activeTab, setActiveTab] = useQueryState(
+    "type",
+    parseAsStringLiteral(["health", "term"] as const).withDefault("health")
+  );
   const [view, setView] = useQueryState(
     "step",
     parseAsStringLiteral(["timeslot", "form", "success"] as const).withDefault("timeslot")
@@ -67,7 +70,7 @@ export function SchedulingCard() {
       <motion.div
         layout
         transition={transition}
-        className="relative w-full overflow-hidden rounded-[24px] border border-[#f6f6f6] bg-white shadow-[0px_0px_11px_0px_rgba(0,0,0,0.02)] lg:w-[411px] lg:rounded-[30px] lg:border-ditto-grey-50 lg:shadow-[0px_4px_13px_0px_rgba(0,0,0,0.03)]"
+        className="relative w-full overflow-hidden lg:w-[411px] lg:rounded-[30px] lg:border lg:border-ditto-grey-50 lg:bg-white lg:shadow-[0px_4px_13px_0px_rgba(0,0,0,0.03)]"
       >
         <AnimatePresence mode="popLayout" initial={false} custom={direction}>
           {view === "timeslot" && (
@@ -161,9 +164,9 @@ function TimeslotView({
 }) {
   return (
     <>
-      <div className="p-5 lg:p-6">
+      <div className="p-4 lg:p-6">
         {/* Tabs — smaller on mobile */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 *:flex-1 lg:*:flex-none">
           <TabButton label="Health Insurance" active={activeTab === "health"} onClick={() => onTabChange("health")} />
           <TabButton label="Term Insurance" active={activeTab === "term"} onClick={() => onTabChange("term")} />
         </div>
@@ -181,22 +184,37 @@ function TimeslotView({
           </div>
         </div>
 
-        {/* Mobile: date + time on one line */}
-        <div className="mt-6 lg:hidden">
-          <div className="flex items-center gap-2 opacity-70">
-            <Image src="/icons/calendar-date.svg" alt="" width={18} height={18} />
-            <span className="font-heading text-[15px] text-[#1a1a1a]">
-              {getDayName(earliestDate)}
-            </span>
-          </div>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="font-heading text-[20px] font-medium text-[#2c2e30]">
-              {formatDateDisplay(earliestDate)}
-            </span>
-            <span className="text-[#ccc]">|</span>
-            <TimeDisplay time="1:00" period="PM" />
-            <ArrowRight className="h-4 w-4 text-[#1a1a1a]" />
-            <TimeDisplay time="1:30" period="PM" />
+        {/* Mobile: yellow summary banner */}
+        <div className="relative mt-5 overflow-hidden rounded-[17px] border border-[#fff7ce] bg-ditto-yellow px-4 py-4 lg:hidden">
+          <Image
+            src="/icons/lightning-large.png"
+            alt=""
+            width={72}
+            height={72}
+            className="absolute right-0 top-0"
+          />
+          <h3 className="relative z-10 text-[19px] font-semibold leading-tight tracking-tight text-[#33383b]">
+            {activeTab === "health" ? "Health" : "Term"} Insurance Advice
+          </h3>
+          <div className="relative z-10 mt-3 flex">
+            <div className="w-[45%]">
+              <div className="flex items-center gap-1.5 opacity-70">
+                <Image src="/icons/calendar-date.svg" alt="" width={15} height={15} className="-mt-0.5" />
+                <span className="font-heading text-[13px] text-[#1a1a1a]">{getDayName(earliestDate)}</span>
+              </div>
+              <p className="mt-1 whitespace-nowrap font-heading text-[18px] font-medium text-[#2c2e30]">
+                {formatDateDisplay(earliestDate)}
+              </p>
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-1.5 opacity-70">
+                <Image src="/icons/clock-time.svg" alt="" width={15} height={15} className="-mt-0.5" />
+                <span className="font-heading text-[13px] text-[#1a1a1a]">Time</span>
+              </div>
+              <p className="mt-1 whitespace-nowrap font-heading text-[18px] font-medium text-[#1a1a1a]">
+                1:00 <span className="text-[12px] align-super">PM</span> → 1:30 <span className="text-[12px] align-super">PM</span>
+              </p>
+            </div>
           </div>
         </div>
 
@@ -231,7 +249,7 @@ function TimeslotView({
       </div>
 
       {/* Buttons — shorter on mobile */}
-      <div className="flex flex-col gap-2 px-5 pb-5 lg:gap-3 lg:px-6 lg:pb-6">
+      <div className="flex flex-col gap-2 px-4 pb-4 lg:gap-3 lg:px-6 lg:pb-6">
         <button
           onClick={onScheduleClick}
           className="flex h-[45px] w-full items-center justify-between rounded-xl bg-ditto-blue-dark px-5 font-heading text-base font-medium text-white shadow-[0px_2px_6px_0px_rgba(0,37,79,0.14)] transition-colors hover:bg-ditto-blue-active lg:h-[62px] lg:rounded-[18px] lg:px-6 lg:text-xl lg:shadow-[0px_6px_12px_0px_rgba(30,37,75,0.06)]"
@@ -267,7 +285,7 @@ function SuccessView({
   const [endVal, endPeriod] = bookedSlot.timeEnd.split(" ");
 
   return (
-    <div className="flex flex-col items-center px-6 py-8">
+    <div className="flex flex-col items-center rounded-[24px] bg-[#F4FAF5] px-5 py-8 lg:rounded-none lg:bg-transparent lg:px-6">
       {/* Stamp */}
       <div className="mix-blend-multiply">
         <Image
@@ -291,8 +309,29 @@ function SuccessView({
         An advisor from Ditto will call you to discuss your insurance queries on
       </p>
 
-      {/* Yellow date/time banner */}
-      <div className="mt-6 flex h-[96px] w-full items-center rounded-[14px] border border-[#fff7ce] bg-ditto-yellow px-6">
+      {/* Mobile: white card with date/time stacked vertically */}
+      <div className="mt-6 w-full rounded-[18px] bg-white p-5 lg:hidden">
+        <div className="flex items-center justify-center gap-2">
+          <Image src="/icons/calendar-date.svg" alt="" width={18} height={18} />
+          <span className="font-heading text-[16px] text-[#1a1a1a]">
+            {bookedSlot.dayName}, {bookedSlot.date}
+          </span>
+        </div>
+        <div className="my-4 border-t border-dashed border-[#e0e0e0]" />
+        <div className="flex items-center justify-center gap-2">
+          <Image src="/icons/clock-time.svg" alt="" width={18} height={18} />
+          <span className="font-heading text-[16px] text-[#1a1a1a]">
+            {timeVal} <span className="align-super text-[11px]">{timePeriod}</span>
+          </span>
+          <span className="text-[#1a1a1a]">→</span>
+          <span className="font-heading text-[16px] text-[#1a1a1a]">
+            {endVal} <span className="align-super text-[11px]">{endPeriod}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Desktop: yellow horizontal date/time banner */}
+      <div className="mt-6 hidden h-[96px] w-full items-center rounded-[14px] border border-[#fff7ce] bg-ditto-yellow px-6 lg:flex">
         <div className="flex w-full gap-8">
           <div>
             <div className="flex items-center gap-1.5 opacity-70">
@@ -321,7 +360,7 @@ function SuccessView({
         </div>
       </div>
 
-      {/* View Case Studies */}
+      {/* View Case Studies — white card on mobile */}
       <button className="mt-8 flex h-[56px] w-full items-center justify-center gap-2 rounded-2xl border border-[#efefef] bg-white shadow-[0px_3px_11px_0px_rgba(0,37,79,0.04)]">
         <Image src="/icons/list.svg" alt="" width={17} height={17} />
         <span className="font-heading text-[17px] font-medium text-[#1a1a1a]">

@@ -66,10 +66,10 @@ export function Navbar() {
       >
         <div className="overflow-hidden">
           <div className="space-y-1 px-6 pt-2 pb-4">
-            <MobileNavLink label="Health Insurance" onClick={() => setMobileOpen(false)} />
-            <MobileNavLink label="Term Insurance" onClick={() => setMobileOpen(false)} />
-            <MobileNavLink label="Claims" onClick={() => setMobileOpen(false)} />
-            <MobileNavLink label="Careers" onClick={() => setMobileOpen(false)} />
+            <MobileNavLink label="Health Insurance" href="?type=health#schedule" onClick={() => setMobileOpen(false)} />
+            <MobileNavLink label="Term Insurance" href="?type=term#schedule" onClick={() => setMobileOpen(false)} />
+            <MobileNavLink label="Claims" href="#" onClick={() => setMobileOpen(false)} />
+            <MobileNavLink label="Careers" href="#" onClick={() => setMobileOpen(false)} />
           </div>
           <div className="px-6 pb-5">
             <Link
@@ -88,11 +88,15 @@ export function Navbar() {
 }
 
 function NavDropdown({ label }: { label: string }) {
+  const type = label.toLowerCase().includes("health") ? "health" : "term";
   return (
-    <button className="flex items-center gap-1 rounded-lg px-4 py-2 font-heading text-base font-medium text-ditto-black transition-colors hover:bg-ditto-grey-100">
+    <Link
+      href={`?type=${type}#schedule`}
+      className="flex items-center gap-1 rounded-lg px-4 py-2 font-heading text-base font-medium text-ditto-black transition-colors hover:bg-ditto-grey-100"
+    >
       {label}
       <ChevronDown className="h-4 w-4 text-ditto-black" />
-    </button>
+    </Link>
   );
 }
 
@@ -116,10 +120,10 @@ function NavLink({
   );
 }
 
-function MobileNavLink({ label, onClick }: { label: string; onClick: () => void }) {
+function MobileNavLink({ label, href, onClick }: { label: string; href: string; onClick: () => void }) {
   return (
     <Link
-      href="#"
+      href={href}
       onClick={onClick}
       className="block rounded-lg px-2 py-3 font-heading text-base font-medium text-ditto-black active:bg-ditto-grey-100"
     >
