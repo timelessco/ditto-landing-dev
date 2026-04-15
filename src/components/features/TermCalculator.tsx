@@ -75,10 +75,10 @@ const INCOME_OPTIONS: Income[] = [
 
 const AGE_MIN = 18;
 const AGE_MAX = 65;
-const COVER_YEARS_MIN = 20;
-const COVER_YEARS_MAX = 99;
-const COVER_AMOUNT_MIN = 0.25;
-const COVER_AMOUNT_MAX = 10;
+const COVER_YEARS_MIN = 18;
+const COVER_YEARS_MAX = 100;
+const COVER_AMOUNT_MIN = 0.5;
+const COVER_AMOUNT_MAX = 3;
 
 /* ─── Main Component ─── */
 
@@ -268,6 +268,13 @@ export function TermCalculator() {
                       onChange={(v) => set("coverYears", v)}
                     />
                   </div>
+                  {values.coverYears > 65 && (
+                    <div className="mt-3 rounded-[10px] bg-[#fefbeb] px-3 py-3">
+                      <p className="font-heading text-[12px] font-medium leading-[1.33] tracking-[0.24px] text-[#30302e]">
+                        Coverage should last until dependents need support (around 65&ndash;70). Beyond that may be unnecessary
+                      </p>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center justify-between">
@@ -549,10 +556,10 @@ function MobileCalculator(props: SharedProps) {
           </div>
         </div>
 
-        {targetAge > 70 && (
-          <div className="mt-4 rounded-[12px] bg-[#fdf9e5] px-4 py-3">
-            <p className="font-heading text-[13px] leading-[1.45] text-[#2e2e30]">
-              Coverage should last until dependents need support (around 65-70). Beyond that may be unnecessary
+        {targetAge > 65 && (
+          <div className="mt-4 rounded-[10px] bg-[#fefbeb] px-3 py-3">
+            <p className="font-heading text-[12px] font-medium leading-[1.33] tracking-[0.24px] text-[#30302e]">
+              Coverage should last until dependents need support (around 65&ndash;70). Beyond that may be unnecessary
             </p>
           </div>
         )}
