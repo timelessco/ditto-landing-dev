@@ -99,9 +99,9 @@ export function BookingForm({
         <button
           type="button"
           onClick={onBack}
-          className="mb-4 flex items-center gap-1.5 text-[14px] text-[#1a1a1a] transition-opacity hover:opacity-70"
+          className="mb-4 flex items-center gap-1.5 text-[14px] text-[#5F5F5F] transition-opacity hover:opacity-70"
         >
-          <Image src="/icons/arrow-back.svg" alt="" width={12} height={11} />
+          <Image src="/icons/arrow-back.svg" alt="" width={12} height={11} className="-translate-y-[1.5px]" />
           <span className="font-heading">Go back</span>
         </button>
       )}

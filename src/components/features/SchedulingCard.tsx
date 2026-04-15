@@ -189,28 +189,28 @@ function TimeslotView({
 
         {/* Title + badge */}
         <div className="mt-5 lg:mt-[35px]">
-          <h2 className="font-heading text-[18px] font-medium leading-tight tracking-tight text-ditto-black lg:text-[21px]">
+          <h2 className="font-heading text-[20px] font-medium leading-tight tracking-tight text-ditto-black lg:text-[21px]">
             Earliest Timeslot for {activeTab === "health" ? "Health" : "Term"} Insurance
           </h2>
           {/* Phase 1: pill pops in */}
           <motion.div
             animate={badgeRevealed ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.72 }}
             transition={{ type: "spring", stiffness: 360, damping: 22 }}
-            className="mt-2 inline-flex items-center gap-1 overflow-hidden rounded-xl bg-ditto-yellow pl-2.5 pr-3 py-1 lg:mt-4 lg:gap-1.5 lg:rounded-[16px] lg:pl-3.5 lg:pr-4 lg:py-1.5"
+            className="mt-3 inline-flex items-center gap-1.5 overflow-hidden rounded-[14px] bg-ditto-yellow pl-3 pr-3.5 py-1.5 lg:mt-4 lg:rounded-[16px] lg:pl-3.5 lg:pr-4"
           >
             {/* Phase 2: icon bounces in with slight rotation */}
             <motion.div
               animate={badgeRevealed ? { scale: 1, rotate: 0 } : { scale: 0.2, rotate: -25 }}
               transition={{ type: "spring", stiffness: 480, damping: 18, delay: 0.07 }}
             >
-              <Image src="/icons/lightning.png" alt="" width={20} height={20} className="lg:h-[25px] lg:w-[25px]" />
+              <Image src="/icons/lightning.png" alt="" width={22} height={22} className="lg:h-[25px] lg:w-[25px]" />
             </motion.div>
 
             {/* Phase 3: text sweeps in left→right with multicolor gradient */}
             <motion.span
               animate={{ clipPath: textRevealed ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)" }}
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className={`whitespace-nowrap font-heading text-[14px] font-medium tracking-tight lg:text-[17px] ${
+              className={`whitespace-nowrap font-heading text-[15px] font-medium tracking-tight lg:text-[17px] ${
                 isFirstRun.current && textRevealed ? "badge-text-animate" : "text-ditto-black"
               }`}
             >
@@ -220,16 +220,18 @@ function TimeslotView({
         </div>
 
         {/* Mobile: inline date/time display */}
-        <div className="mt-5 lg:hidden">
+        <div className="mt-6 lg:hidden">
           <div className="flex items-center gap-1.5">
-            <Image src="/icons/calendar-date.svg" alt="" width={18} height={18} />
-            <span className="font-heading text-[16px] text-[#1a1a1a]">{getDayName(earliestDate)}</span>
+            <Image src="/icons/calendar-date.svg" alt="" width={20} height={20} />
+            <span className="font-heading text-[17px] leading-[1] text-[#646259] translate-y-[2px]">{getDayName(earliestDate)}</span>
           </div>
-          <p className="mt-1 whitespace-nowrap font-heading text-[20px] font-medium text-[#2c2e30]">
+          <p className="mt-1.5 whitespace-nowrap font-heading text-[22px] font-medium leading-none text-[#2c2e30]">
             {formatDateDisplay(earliestDate)}{" "}|{" "}
-            1:00 <span className="text-[11px] align-super">PM</span>
+            <RollingTime value="1:00" startDelay={0.2} />
+            <span className="text-[12px] align-super"> PM</span>
             {" "}<span className="text-[#2c2e30]">→</span>{" "}
-            1:30 <span className="text-[11px] align-super">PM</span>
+            <RollingTime value="1:30" startDelay={0.6} />
+            <span className="text-[12px] align-super"> PM</span>
           </p>
         </div>
 
@@ -238,7 +240,7 @@ function TimeslotView({
           <div className="mt-8">
             <div className="flex items-center gap-1.5">
               <Image src="/icons/calendar-date.svg" alt="" width={20} height={20} className="shrink-0" />
-              <span className="font-heading text-[15px] leading-none text-[#1a1a1a] opacity-70">
+              <span className="font-heading text-[15px] leading-none text-[#1a1a1a] opacity-70 translate-y-[2px]">
                 {getDayName(earliestDate)}
               </span>
             </div>
@@ -267,14 +269,14 @@ function TimeslotView({
       <div className="flex flex-col gap-2 px-4 pb-4 lg:gap-3 lg:px-6 lg:pb-6">
         <button
           onClick={onScheduleClick}
-          className="flex h-[45px] w-full items-center justify-between rounded-xl bg-ditto-blue-dark px-5 font-heading text-base font-medium text-white shadow-[0px_2px_6px_0px_rgba(0,37,79,0.14)] transition-colors hover:bg-ditto-blue-active lg:h-[62px] lg:rounded-[18px] lg:px-6 lg:text-xl lg:shadow-[0px_6px_12px_0px_rgba(30,37,75,0.06)]"
+          className="flex h-[52px] w-full items-center justify-between rounded-xl bg-ditto-blue-dark px-5 font-heading text-[17px] font-medium text-white shadow-[0px_2px_6px_0px_rgba(0,37,79,0.14)] transition-colors hover:bg-ditto-blue-active lg:h-[62px] lg:rounded-[18px] lg:px-6 lg:text-xl lg:shadow-[0px_6px_12px_0px_rgba(30,37,75,0.06)]"
         >
           <span>Schedule a Free Call</span>
           <Image src="/icons/phone-calendar.svg" alt="" width={20} height={19} className="lg:h-5 lg:w-[21px]" />
         </button>
         <button
           onClick={onPickSlots}
-          className="flex h-[45px] w-full items-center justify-between rounded-xl border border-ditto-grey-50 bg-white px-5 font-heading text-base font-medium text-ditto-grey-600 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-ditto-grey-100 lg:h-[62px] lg:rounded-[18px] lg:px-6 lg:text-xl lg:shadow-[0px_4px_13px_0px_rgba(0,0,0,0.03)]"
+          className="flex h-[52px] w-full items-center justify-between rounded-xl border border-ditto-grey-50 bg-white px-5 font-heading text-[17px] font-medium text-ditto-grey-600 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-ditto-grey-100 lg:h-[62px] lg:rounded-[18px] lg:px-6 lg:text-xl lg:shadow-[0px_4px_13px_0px_rgba(0,0,0,0.03)]"
         >
           <span>Pick preferred time (24 slots)</span>
           <Image src="/icons/calendar-slot.svg" alt="" width={19} height={19} className="lg:h-[21px] lg:w-[21px]" />
@@ -427,3 +429,56 @@ function TimeDisplay({ time, period }: { time: string; period: string }) {
     </div>
   );
 }
+
+/* ─── Rolling digit animation ─── */
+
+function RollingDigit({ digit, delay }: { digit: number; delay: number }) {
+  const cells = React.useMemo(() => {
+    const extraCycles = 15;
+    return Array.from({ length: extraCycles + digit + 1 }, (_, i) => i % 10);
+  }, [digit]);
+  const finalIndex = cells.length - 1;
+
+  const anchorRef = React.useRef<HTMLSpanElement | null>(null);
+  const [cellHeight, setCellHeight] = React.useState<number | null>(null);
+
+  React.useLayoutEffect(() => {
+    if (anchorRef.current) setCellHeight(anchorRef.current.offsetHeight);
+  }, []);
+
+  return (
+    <span
+      className="relative inline-block overflow-hidden leading-none"
+      style={{ verticalAlign: "baseline" }}
+    >
+      {/* Invisible baseline anchor — also used to measure the cell height in px. */}
+      <span ref={anchorRef} className="invisible">0</span>
+      {cellHeight !== null && (
+        <motion.span
+          initial={{ y: 0 }}
+          animate={{ y: -finalIndex * cellHeight }}
+          transition={{ duration: 1.3, delay, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute left-0 top-0 flex flex-col leading-none"
+        >
+          {cells.map((d, i) => (
+            <span key={i} style={{ height: cellHeight }}>{d}</span>
+          ))}
+        </motion.span>
+      )}
+    </span>
+  );
+}
+
+function RollingTime({ value, startDelay }: { value: string; startDelay: number }) {
+  return (
+    <span className="inline-flex items-baseline">
+      {value.split("").map((ch, i) => {
+        if (/[0-9]/.test(ch)) {
+          return <RollingDigit key={i} digit={parseInt(ch, 10)} delay={startDelay + i * 0.1} />;
+        }
+        return <span key={i}>{ch}</span>;
+      })}
+    </span>
+  );
+}
+

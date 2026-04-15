@@ -82,9 +82,9 @@ export function MoreSlotsDrawer({ open, onOpenChange, activeTab, onScheduleSucce
   const ctaLabel = selectedTime ? `Confirm ${dayAbbr}, ${selectedTime} Call` : "Confirm Call";
 
   const slotPicker = (
-    <div className="flex-1 px-5 py-6 lg:overflow-y-auto lg:px-10 lg:py-10">
-      {/* Date row */}
-      <div className="flex gap-2 overflow-x-auto pb-2 lg:gap-3">
+    <div className="flex-1 px-5 pb-6 pt-2 lg:overflow-y-auto lg:px-10 lg:py-10">
+      {/* Date row — desktop only (mobile renders a sticky version outside the scroll area) */}
+      <div className="hidden gap-2 overflow-x-auto pb-2 lg:flex lg:gap-3">
         {dates.map((date, i) => (
           <DatePill
             key={i}
@@ -96,7 +96,7 @@ export function MoreSlotsDrawer({ open, onOpenChange, activeTab, onScheduleSucce
         ))}
       </div>
 
-      <p className="mt-6 font-heading text-[14px] text-[#1f2127] lg:mt-8 lg:text-[18px]">
+      <p className="mt-2 font-heading text-[17px] text-[#1f2127] lg:mt-8 lg:text-[18px]">
         What time works for you?
       </p>
 
@@ -104,7 +104,7 @@ export function MoreSlotsDrawer({ open, onOpenChange, activeTab, onScheduleSucce
       <SlotSection icon="/icons/sun-afternoon.svg" label="Noon" slots={AFTERNOON_SLOTS} selectedDate={selectedDate} selectedTime={selectedTime} onSelect={setSelectedTime} />
       <SlotSection icon="/icons/sunset.svg" label="Evening" slots={EVENING_SLOTS} selectedDate={selectedDate} selectedTime={selectedTime} onSelect={setSelectedTime} />
 
-      <p className="mt-6 text-[13px] leading-relaxed text-[#7b838c] lg:mt-8 lg:text-[14px]">
+      <p className="mt-6 hidden text-[14px] leading-relaxed text-[#7b838c] lg:mt-8 lg:block lg:text-[14px]">
         Average call usually lasts 30 minutes.
         <br />
         That is enough time to get all your queries addressed.
@@ -140,22 +140,40 @@ export function MoreSlotsDrawer({ open, onOpenChange, activeTab, onScheduleSucce
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="flex max-h-[90vh] flex-col bg-white p-0">
+        <DrawerContent className="flex h-[85vh] max-h-[85vh] flex-col bg-white p-0">
           <DrawerTitle className="sr-only">Other Available Slots</DrawerTitle>
           <DrawerDescription className="sr-only">
             Pick a preferred time slot for your insurance consultation call.
           </DrawerDescription>
 
+          {/* Fixed header: title + date pills */}
+          <div className="shrink-0 bg-white px-5 pb-3 pt-5">
+            <p className="font-heading text-[18px] font-medium text-[#33383b]">Other Available Slots</p>
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+              {dates.map((date, i) => (
+                <DatePill
+                  key={i}
+                  label={getDayAbbreviation(date, i === 0)}
+                  dayNumber={date.getDate()}
+                  selected={i === selectedDateIndex}
+                  onClick={() => handleDateChange(i)}
+                />
+              ))}
+            </div>
+          </div>
+
           {/* Scrollable slot area */}
           <div className="min-h-0 flex-1 overflow-y-auto">
-            <div className="px-5 pb-4 pt-5">
-              <p className="font-heading text-[16px] font-medium text-[#33383b]">Other Available Slots</p>
-            </div>
             {slotPicker}
           </div>
 
           {/* Fixed CTA */}
           <div className="shrink-0 bg-white px-5 pb-7 pt-3">
+            <p className="mb-3 text-[13px] leading-relaxed text-[#7b838c]">
+              Average call usually lasts 30 minutes.
+              <br />
+              That is enough time to get all your queries addressed.
+            </p>
             <button
               onClick={() => {
                 if (!selectedTime) return;
@@ -189,7 +207,7 @@ export function MoreSlotsDrawer({ open, onOpenChange, activeTab, onScheduleSucce
   /* ─── Desktop: Centered Dialog ─── */
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="!max-w-none sm:!max-w-none !w-[calc(100vw-400px)] !min-w-[1000px] max-h-[90vh] gap-0 !overflow-hidden !rounded-[44px] !ring-0 bg-transparent p-0 shadow-[0px_-5px_18px_rgba(92,102,110,0.05),0px_3px_35px_rgba(92,102,110,0.04),0px_30px_40px_rgba(92,102,110,0.18)]">
+      <DialogContent showCloseButton={false} className="!max-w-[1030px] sm:!max-w-[1030px] !w-[calc(100vw-200px)] !min-w-[930px] max-h-[90vh] gap-0 !overflow-hidden !rounded-[44px] !ring-0 bg-transparent p-0 shadow-[0px_-5px_18px_rgba(92,102,110,0.05),0px_3px_35px_rgba(92,102,110,0.04),0px_30px_40px_rgba(92,102,110,0.18)]">
         {/* Inner wrapper applies squircle clip-path for iOS-style smooth corners */}
         <div ref={squircleRef as React.RefObject<HTMLDivElement>} className="flex max-h-[90vh] flex-col overflow-hidden bg-[#fdfdfd]">
           <DialogDescription className="sr-only">
@@ -235,16 +253,16 @@ function DatePill({
   return (
     <button
       onClick={onClick}
-      className={`flex h-[45px] w-[46px] shrink-0 flex-col items-center justify-center rounded-[12px] transition-all lg:h-[63px] lg:w-[65px] ${
+      className={`flex h-[52px] w-[54px] shrink-0 flex-col items-center justify-center rounded-[12px] transition-all lg:h-[63px] lg:w-[65px] ${
         selected
           ? "bg-[#1f2127] text-white shadow-[0px_1px_3px_rgba(0,0,0,0.08),0px_6px_9px_rgba(0,0,0,0.04)]"
           : "border border-[#e3e7ed] bg-[#fcfcfc] text-[#1f2127] shadow-[0px_1px_3px_rgba(0,0,0,0.08),0px_6px_9px_rgba(0,0,0,0.04)] hover:bg-[#f5f5f5]"
       }`}
     >
-      <span className={`text-[9px] lg:text-[11px] ${selected ? "text-white" : "text-[#a9adb7]"}`}>
+      <span className={`text-[11px] lg:text-[11px] ${selected ? "text-white" : "text-[#a9adb7]"}`}>
         {label}
       </span>
-      <span className="font-heading text-[15px] font-medium tracking-tight lg:text-[21px]">
+      <span className="font-heading text-[18px] font-medium tracking-tight lg:text-[21px]">
         {dayNumber}
       </span>
     </button>
@@ -269,7 +287,7 @@ function SlotSection({
   onSelect: (time: string) => void;
 }) {
   return (
-    <div className="mt-6">
+    <div className="mt-4 lg:mt-6">
       <div className="flex items-center gap-1.5">
         <Image src={icon} alt="" width={18} height={18} />
         <span className="font-heading text-[15px] text-[#6c7680]">{label}</span>
@@ -283,7 +301,7 @@ function SlotSection({
               key={slot}
               disabled={disabled}
               onClick={() => onSelect(slot)}
-              className={`flex h-[30px] w-[67px] items-center justify-center rounded-[10px] text-[11px] transition-all lg:w-[80px] lg:text-[13px] ${
+              className={`flex h-[36px] w-[76px] items-center justify-center rounded-[10px] text-[13px] transition-all lg:h-[30px] lg:w-[80px] lg:text-[13px] ${
                 active
                   ? "bg-[#1f2127] font-medium text-white"
                   : disabled
