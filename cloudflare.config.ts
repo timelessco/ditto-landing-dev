@@ -2,7 +2,7 @@ import { bindings, defineConfig, defineWorker } from "cf/config";
 
 export default defineConfig({
   worker: defineWorker({
-    name: "ditto-dev",
+    name: "ditto-landing-dev",
     entrypoint: "vinext/server/fetch-handler",
     compatibilityDate: "2026-10-20",
     compatibilityFlags: ["nodejs_compat"],
